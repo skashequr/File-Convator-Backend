@@ -1,5 +1,6 @@
 const generateToken = require("../Config/generateToken");
 const UserModel = require("../modals/userModel");
+const mongoose = require("mongoose");
 const expressAsyncHandler = require("express-async-handler");
 // Login
 const loginController = expressAsyncHandler(async (req, res) => {
@@ -9,8 +10,8 @@ const loginController = expressAsyncHandler(async (req, res) => {
   const user = await UserModel.findOne({ name });
 
   console.log("fetched user Data", user);
-  console.log(await user.matchPassword(password));
-  if (user && (await user.matchPassword(password))) {
+  console.log("efhqwfgwjeh" , await user.matchPassword(password));
+  if (user && password==user.password) {
     const response = {
       _id: user._id,
       name: user.name,
@@ -25,6 +26,7 @@ const loginController = expressAsyncHandler(async (req, res) => {
     throw new Error("Invalid UserName or Password");
   }
 });
+
 
 // Registration
 const registerController = expressAsyncHandler(async (req, res) => {
