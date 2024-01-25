@@ -77,9 +77,11 @@ const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
         ],
       }
     : {};
+  console.log(keyword);
 
+  // Check if req.user exists before accessing its properties
   const users = await UserModel.find(keyword).find({
-    _id: { $ne: req.user._id },
+    _id: { $ne: req.user ? req.user._id : null },
   });
   res.send(users);
 });
