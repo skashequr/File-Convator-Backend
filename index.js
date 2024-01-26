@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
+const { feedback } = require('./controlers/feedbackControllers');
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -31,7 +32,7 @@ console.log(process.env.MONGO_URI);
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
-
+app.use("/feedback", feedback)
 
 
 app.get('/', (req, res) => {
