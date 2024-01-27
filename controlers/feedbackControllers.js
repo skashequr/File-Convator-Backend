@@ -18,8 +18,9 @@ const sendFeedback = asyncHandler(async (req, res) => {
     try {
       console.log("Fetching Feedbacks API...");
       const feedbackData = req.body
-      const createdChat = await Feedback.create(feedbackData);
       console.log(feedbackData);
+      const createdChat = await Feedback.create(feedbackData);
+      console.log("dhtjna");
   
       res.status(200).json(results);
     } catch (error) {

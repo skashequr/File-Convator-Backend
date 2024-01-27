@@ -33,6 +33,7 @@ const registerController = expressAsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   // check for all fields
+  console.log("password = " , password , " email = " , email , "name = " , name);
   if (!name || !email || !password) {
     res.send(400);
     throw Error("All necessary input fields have not been filled");
