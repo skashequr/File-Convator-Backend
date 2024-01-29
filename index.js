@@ -10,8 +10,13 @@ const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
 const { feedback } = require('./controlers/feedbackControllers');
+
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "https://65b3cce58629d423447243ca--neon-stardust-afce27.netlify.app/"],
+ 
+  credentials: true,
+}));
 app.use(express.json());
 
 
