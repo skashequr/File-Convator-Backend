@@ -2,6 +2,7 @@ const generateToken = require("../Config/generateToken");
 const UserModel = require("../modals/userModel");
 const mongoose = require("mongoose");
 const expressAsyncHandler = require("express-async-handler");
+const User = require('../modals/singleUser');
 // Login
 const loginController = expressAsyncHandler(async (req, res) => {
   console.log(req.body);
@@ -87,8 +88,29 @@ const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
   res.send(users);
 });
 
+const singleUser =expressAsyncHandler(async (req, res) => {
+
+  const userEmail = req.query.email;
+  try {
+    // Query the database for user data associated with the provided email
+    const user = await User.findOne({ email: userEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // If user data is found, you can send it as a response
+    res.status(200).json(user);
+  } catch (error) {
+    // Handle any errors that occur during the database query
+    console.error('Error retrieving user data:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 module.exports = {
   loginController,
   registerController,
   fetchAllUsersController,
+  singleUser
 };

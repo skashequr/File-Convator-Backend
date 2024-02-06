@@ -3,17 +3,17 @@ const Chat = require("../modals/chatModals");
 const User = require("../modals/userModel");
 
 const accessChat = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
-
+  const { userId , singleuserId } = req.body;
+  console.log("UserId: ", userId , "singleUserId :" , singleuserId);
   if (!userId) {
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
   }
-
+ 
   var isChat = await Chat.find({
     isGroupChat: false,
     $and: [
-      { users: { $elemMatch: { $eq: req.user._id } } },
+      { users: { $elemMatch: { $eq: singleuserId } } },
       { users: { $elemMatch: { $eq: userId } } },
     ],
   })
@@ -31,7 +31,7 @@ const accessChat = asyncHandler(async (req, res) => {
     var chatData = {
       chatName: "sender",
       isGroupChat: false,
-      users: [req.user._id, userId],
+      users: [singleuserId, userId],
     };
 
     try {
@@ -50,8 +50,8 @@ const accessChat = asyncHandler(async (req, res) => {
 
 const fetchChats = asyncHandler(async (req, res) => {
   try {
-    console.log("Fetch Chats aPI : ", req);
-    Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    console.log("Fetch Chats aPI : ", req.query.userId);
+    Chat.find({ users: { $elemMatch: { $eq: req.query.userId } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
@@ -135,10 +135,34 @@ const groupExit = asyncHandler(async (req, res) => {
   }
 });
 
+const addSelfToGroup = asyncHandler(async (req, res) => {
+    const {chatId , userId} = req.body;
+
+    const added = await Chat.findByIdAndUpdate(
+      chatId,
+      {
+        $push: {users:userId},
+      },
+      {
+        new:true,
+      }
+    )
+    .populate("users","-password")
+    .populate("groupAdmin","-password")
+    if (!added) {
+      res.status(404)
+      throw new error("chat not found")
+    }
+    else{
+      req.json(added)
+    }
+})
+
 module.exports = {
   accessChat,
   fetchChats,
   fetchGroups,
   createGroupChat,
   groupExit,
+  addSelfToGroup
 };
