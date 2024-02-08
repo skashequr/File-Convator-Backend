@@ -28,25 +28,25 @@ const loginController = expressAsyncHandler(async (req, res) => {
 });
 
 
-// Registration
+// -----------Registration----------
 const registerController = expressAsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  // check for all fields
+  // ------------check for all fields-----------
   console.log("password = " , password , " email = " , email , "name = " , name);
   if (!name || !email || !password) {
     res.send(400);
     throw Error("All necessary input fields have not been filled");
   }
 
-  // pre-existing user
+  //--------------- pre-existing user------------------
   const userExist = await UserModel.findOne({ email });
   if (userExist) {
     // res.send(405);
     throw new Error("User already Exists");
   }
 
-  // userName already Taken
+  // -------------userName already Taken-------------------
   const userNameExist = await UserModel.findOne({ name });
   if (userNameExist) {
     // res.send(406);
