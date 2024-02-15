@@ -88,7 +88,7 @@ router.post("/payment-success/:tranId", async (req, res) => {
       });
     }
 
-    res.redirect(`http://localhost:5174/aboutUs`);
+    res.redirect(`http://localhost:5173/aboutUs`);
   } catch (error) {
     console.error("Error updating payment:", error);
     res.status(500).json({
