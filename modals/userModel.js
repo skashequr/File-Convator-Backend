@@ -15,7 +15,15 @@ const userModel = mongoose.Schema(
       type: String,
       requried: true,
     },
+    isAdmin:{
+      type: Boolean,
+      requried: true
+    },
     imgUrl: {
+      type: String,
+      requried: true,
+    },
+    Userole: {
       type: String,
       requried: true,
     },
