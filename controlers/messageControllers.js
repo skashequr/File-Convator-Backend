@@ -5,6 +5,7 @@ const Chat = require("../modals/chatModals");
 
 const allMessages = expressAsyncHandler(async (req, res) => {
   try {
+    console.log(req.params.chatId);
     const messages = await Message.find({ chat: req.params.chatId })
       .populate("sender", "name email")
       .populate("reciever")
@@ -17,8 +18,9 @@ const allMessages = expressAsyncHandler(async (req, res) => {
 });
 
 const sendMessage = expressAsyncHandler(async (req, res) => {
-  const { content, chatId } = req.body;
-    console.log(req.body);
+  const { content, chatId , data } = req.body;
+  console.log(data);
+    // console.log(req.body);
     console.log(`content = ${content} chatId=${chatId}`);
   if (!content || !chatId) {
     console.log("Invalid data passed into request");
@@ -29,6 +31,7 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
     sender: req.user?._id,
     content: content,
     chat: chatId,
+    data: data
   };
 
   try {
