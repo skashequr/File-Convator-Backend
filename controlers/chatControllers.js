@@ -3,8 +3,8 @@ const Chat = require("../modals/chatModals");
 const User = require("../modals/userModel");
 
 const accessChat = asyncHandler(async (req, res) => {
-  const { userId , singleuserId } = req.body;
-  console.log("UserId: ", userId , "singleUserId :" , singleuserId);
+  const { userId , singleuserId , secUser , friUser } = req.body;
+  console.log("UserId: ", userId , "singleUserId :" , singleuserId , "friuser : " , friUser , "seruser : " ,secUser);
   if (!userId) {
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
@@ -15,6 +15,7 @@ const accessChat = asyncHandler(async (req, res) => {
     $and: [
       { users: { $elemMatch: { $eq: singleuserId } } },
       { users: { $elemMatch: { $eq: userId } } },
+      
     ],
   })
     .populate("users", "-password")
@@ -33,7 +34,6 @@ const accessChat = asyncHandler(async (req, res) => {
       isGroupChat: false,
       users: [singleuserId, userId],
     };
-
     try {
       const createdChat = await Chat.create(chatData);
       const FullChat = await Chat.findOne({ _id: createdChat._id }).populate(
@@ -50,12 +50,19 @@ const accessChat = asyncHandler(async (req, res) => {
 
 const fetchChats = asyncHandler(async (req, res) => {
   try {
-    console.log("Fetch Chats aPI : ", req.query.userId);
+    const { page, searchQuery } = req.query;
+    const  perPage = 5;
+    const pageNumber = parseInt(page) || 1;
+    const limit = parseInt(perPage) || 2;
+    const skip = (pageNumber - 1) * limit;
+    // console.log("Fetch Chats aPI : ", req.query.userId);
+    console.log("page", "=" , page , "perPage" , "=" , perPage , searchQuery);
     Chat.find({ users: { $elemMatch: { $eq: req.query.userId } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
+      .skip(skip).limit(limit)
       .then(async (results) => {
         results = await User.populate(results, {
           path: "latestMessage.sender",

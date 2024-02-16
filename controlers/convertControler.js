@@ -6,19 +6,22 @@ const Docxtemplater = require('docxtemplater');
 const XlsxPopulate = require('xlsx-populate');
 const PptxGen = require('pptxgenjs');
 
-const PdfToPpt = asyncHandler(async (req, res) => {
-  
-  try {
-    const pdfFilePath = "../uploads"; // Path of the uploaded PDF file
-    const outputFolder = './output'; // Output folder where converted files will be saved
-    console.log(req.body.formData);
-    // Your conversion logic here...
 
-    res.status(200).json({ message: 'Conversion successful' });
-  } catch (error) {
-    console.error('Error during conversion:', error);
-    res.status(500).json({ error: 'Conversion failed' });
-  }
+
+
+const PdfToPpt = asyncHandler(async (req, res) => {
+  console.log("xxyyzz");
+  // const pdfBytes = fs.readFileSync("../uploads");
+  // console.log(pdfBytes);
+  // const pdfDoc = await PDFDocument.load(pdfBytes);
+
+  // const pagesText = [];
+  // for (let i = 0; i < pdfDoc.getPageCount(); i++) {
+  //   const page = pdfDoc.getPage(i);
+  //   const text = await page.getText();
+  //   pagesText.push(text);
+  // }
+  res.json({ filename: req.file.originalname });
 });
 
 module.exports = {
