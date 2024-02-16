@@ -1,9 +1,20 @@
-const express = require("express");
-const { PdfToPpt } = require("../controlers/convertControler");
-const multer = require("multer");
+const express = require('express');
+const multer = require('multer');
+const app = express();
 const router = express.Router();
-const storage = multer.memoryStorage();
+// Multer configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Specify the destination directory for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Specify the filename of the uploaded file
+  }
+});
+
 const upload = multer({ storage: storage });
-router.route("/").get();
-router.route("/").post( upload.single('file') , PdfToPpt);
+
+const { PdfToPpt } = require('../controlers/convertControler');
+router.route("/")
+router.post('/',upload.single('file'), PdfToPpt);
 module.exports = router;

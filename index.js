@@ -10,7 +10,7 @@ const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
 const { feedback } = require("./controlers/feedbackControllers");
-// const convertRoutes = require("./Routes/convertRoutes");
+const convertRoutes = require("./Routes/convertRoutes");
 const paymentRoutes = require("./controlers/paymentController");
 const accessRoutes = require("./controlers/accessCardController");
 
@@ -46,7 +46,7 @@ app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
 app.use("/feedback", feedback);
-// app.use("/convert", convertRoutes);
+app.use("/convert", convertRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/access-card", accessRoutes);
 
