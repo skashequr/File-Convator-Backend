@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const router = express.Router();
 const Payment = require("../modals/paymentModals");
 const SSLCommerzPayment = require("sslcommerz-lts");
@@ -7,16 +6,32 @@ const { ObjectId } = require("mongodb");
 const store_id = "black65cb4eba5f405";
 const store_passwd = "black65cb4eba5f405@ssl";
 const is_live = false; //true for live, false for sandbox
+const currentDate = new Date();
 
+// Set the time zone to Bangladesh Standard Time (BST), which is UTC+6
+const options = {
+  timeZone: 'Asia/Dhaka',
+  hour12: false, // Use 24-hour format
+};
+
+// Format the date object to display the time in Bangladesh
+const bdTime = currentDate.toLocaleTimeString('en-US', options);
+
+console.log('Current time in Bangladesh:', bdTime);
 router.post("/", async (req, res) => {
   try {
     const tranId = new ObjectId().toString();
 
     const memberUserInformation = {
-      plan_id: req.body.productId,
-      access_limit: req.body.access_limit,
-      price_per_month: req.body.price_per_month,
+      cus_name: req.body.name,
+      cus_email: req.body.email,
+      cus_address: req.body.address,
+      cus_phone: req.body.phone,
       plan: req.body.plan,
+      price: req.body.price,
+      access_limit: req.body.access_limit,
+      plan_id: req.body.productId,
+      pay_time: bdTime,
       tran_id: tranId,
       paidStatus: false,
     };
@@ -26,7 +41,7 @@ router.post("/", async (req, res) => {
     await PaymentUserInformation.save();
 
     const data = {
-      total_amount: req.body.price_per_month,
+      total_amount: req.body.price,
       currency: "BDT",
       tran_id: tranId,
       success_url: `http://localhost:5000/payment/payment-success/${tranId}`,
@@ -38,15 +53,15 @@ router.post("/", async (req, res) => {
       product_name: "Computer.",
       product_category: "Electronic",
       product_profile: "general",
-      cus_name: "Customer Name",
-      cus_email: "customer@example.com",
+      cus_name: req.body.name,
+      cus_email: req.body.email,
       cus_add1: "Dhaka",
       cus_add2: "Dhaka",
-      cus_city: "Dhaka",
+      cus_city: req.body.address,
       cus_state: "Dhaka",
       cus_postcode: "1000",
       cus_country: "Bangladesh",
-      cus_phone: "01313131311",
+      cus_phone: req.body.phone,
       cus_fax: "01711111111",
       ship_name: "Customer Name",
       ship_add1: "Dhaka",
