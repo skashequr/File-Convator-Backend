@@ -5,14 +5,17 @@
   "description": "",
   "main": "node index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@adobe/pdfservices-node-sdk": "^3.4.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "docx-pdf": "^0.0.1",
     "docxtemplater": "^3.44.0",
     "dotenv": "^16.3.2",
     "express": "^4.18.2",
