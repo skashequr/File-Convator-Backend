@@ -1,21 +1,41 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = mongoose.Schema({
+  cus_name: {
+    type: String,
+    required: true,
+  },
+  cus_email: {
+    type: String,
+    required: true,
+  },
+  cus_address: {
+    type: String,
+    required: true,
+  },
+  cus_phone: {
+    type: Number, // Changed to Number
+    required: true,
+  },
   plan: {
     type: String,
     required: true,
   },
-  price_per_month: {
+  price: {
     type: String,
     required: true,
   },
   access_limit: {
     type: String,
-    // required: true,
+    required: true,
   },
   plan_id: {
     type: String,
-    // required: true,
+    required: true,
+  },
+  pay_time: {
+    type: String,
+    required: true,
   },
   tran_id: {
     type: String,

@@ -12,6 +12,8 @@ const messageRoutes = require("./Routes/messageRoutes");
 const { feedback } = require("./controlers/feedbackControllers");
 // const convertRoutes = require("./Routes/convertRoutes");
 const paymentRoutes = require("./controlers/paymentController");
+const accessRoutes = require("./controlers/accessCardController");
+
 // middleware
 app.use(
   cors({
@@ -38,7 +40,7 @@ const connectDb = async () => {
   }
 };
 connectDb();
-console.log(process.env.MONGO_URI);
+console.log(process.env.MONGO_URI); 
 
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
@@ -46,6 +48,7 @@ app.use("/message", messageRoutes);
 app.use("/feedback", feedback);
 // app.use("/convert", convertRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/access-card", accessRoutes);
 
 app.get("/", (req, res) => {
   res.send("EndGame Group Project File Convarting running");
