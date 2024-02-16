@@ -15,6 +15,10 @@ const userModel = mongoose.Schema(
       type: String,
       requried: true,
     },
+    imgUrl: {
+      type: String,
+      requried: true,
+    },
   },
   {
     timeStamp: true,

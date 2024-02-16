@@ -10,13 +10,14 @@ const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
 const { feedback } = require('./controlers/feedbackControllers');
-
-//---------------------- middleware-----------------
+const convertRoutes = require("./Routes/convertRoutes");
+// middleware
 app.use(cors({
-  origin: ["http://localhost:5173", "https://65bd029bbb4eb300a0dacbdd--neon-stardust-afce27.netlify.app/"],
+  origin: ["http://localhost:5173"],
  
   credentials: true,
 }));
+app.use(express.json());
 app.use(express.json());
 
 
@@ -38,7 +39,7 @@ app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
 app.use("/feedback", feedback)
-
+app.use("/convert" , convertRoutes)
 
 app.get('/', (req, res) => {
     res.send('EndGame Group Project File Convarting running')
