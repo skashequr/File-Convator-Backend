@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+
+
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config()
 
-const port = process.env.PORT || 5000 ;
+const port = process.env.PORT || 5000;
+
 const mongoose = require('mongoose');
 const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
@@ -18,7 +21,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-app.use(express.json());
+
 
 
 
@@ -40,6 +43,9 @@ app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
 app.use("/feedback", feedback)
 app.use("/convert" , convertRoutes)
+
+// Endpoint for PDF to Word conversion
+
 
 app.get('/', (req, res) => {
     res.send('EndGame Group Project File Convarting running')
