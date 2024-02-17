@@ -119,10 +119,7 @@ router.get("/", async (req, res, next) => {
     const payment = await Payment.find();
 
     // Send a response with the retrieved todos
-    res.status(200).json({
-      message: "All Payment were retrieved successfully",
-      allPayment: payment,
-    });
+    res.status(200).json( payment );
   } catch (error) {
     // Handle errors
     res.status(500).json({
