@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const { PdfToPpt } = require('../controlers/convertControler');
-router.route("/")
+const { PdfToPpt, pdfToPPtGet } = require('../controlers/convertControler');
+router.get("/" , pdfToPPtGet)
 router.post('/',upload.single('file'), PdfToPpt);
 module.exports = router;
