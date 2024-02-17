@@ -18,6 +18,7 @@ const accessRoutes = require("./controlers/accessCardController");
 app.use(
   cors({
     origin: [
+      "https://65cf7c887739e70095b163ee--spectacular-profiterole-6a28ae.netlify.app",
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",
@@ -27,7 +28,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.json());
+
 
 const connectDb = async () => {
   try {
@@ -40,8 +41,7 @@ const connectDb = async () => {
   }
 };
 connectDb();
-console.log(process.env.MONGO_URI); 
-
+console.log(process.env.MONGO_URI);
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
@@ -50,9 +50,12 @@ app.use("/convert", convertRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/access-card", accessRoutes);
 
-app.get("/", (req, res) => {
-  res.send("EndGame Group Project File Convarting running");
-});
+// Endpoint for PDF to Word conversion
+
+
+app.get('/', (req, res) => {
+    res.send('EndGame Group Project File Convarting running')
+})
 
 app.listen(port, () => {
   console.log(`EndGame Group Project File Convarting running in ${port}`);

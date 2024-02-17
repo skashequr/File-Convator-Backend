@@ -10,14 +10,13 @@ const accessSchema = mongoose.Schema({
   },
   access_limit: {
     type: String,
-    // required: true,
+    required: true,
   },
-  plan_id: {
-    type: String,
-    // required: true,
+  access_limit_day: {
+    type: Number,
+    required: true,
   },
 });
-
 
 /**{
   "plan": "Standard Plan",
