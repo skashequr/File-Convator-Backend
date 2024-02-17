@@ -33,6 +33,10 @@ const paymentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  access_limit_day: {
+    type: Number,
+    required: true,
+  },
   pay_time: {
     type: String,
     required: true,

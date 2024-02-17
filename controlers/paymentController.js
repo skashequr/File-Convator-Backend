@@ -6,23 +6,6 @@ const { ObjectId } = require("mongodb");
 const store_id = "black65cb4eba5f405";
 const store_passwd = "black65cb4eba5f405@ssl";
 const is_live = false; //true for live, false for sandbox
-var today = new Date();
-
-var formatter = new Intl.DateTimeFormat("en", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: false,
-  timeZone: "Asia/Dhaka", // Bangladesh Standard Time
-});
-
-// Format the date and time using the formatter
-var dateTime = formatter.format(today);
-
-console.log("dateTime", dateTime);
 
 // Set the time zone to Bangladesh Standard Time (BST), which is UTC+6
 // const options = {
@@ -43,6 +26,23 @@ console.log("dateTime", dateTime);
 // console.log('Current time in Bangladesh:', bdTime);
 router.post("/", async (req, res) => {
   try {
+    var today = new Date();
+
+    var formatter = new Intl.DateTimeFormat("en", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Dhaka", // Bangladesh Standard Time
+    });
+
+    // Format the date and time using the formatter
+    var dateTime = formatter.format(today);
+
+    console.log("dateTime", dateTime);
     const tranId = new ObjectId().toString();
 
     const memberUserInformation = {
@@ -54,6 +54,7 @@ router.post("/", async (req, res) => {
       price: req.body.price,
       access_limit: req.body.access_limit,
       plan_id: req.body.productId,
+      access_limit_day: req.body.access_limit_day,
       pay_time: dateTime,
       tran_id: tranId,
       paidStatus: false,

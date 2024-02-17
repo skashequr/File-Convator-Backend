@@ -56,4 +56,24 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
+router.delete("/", async (req, res, next) => {
+  console.log("all deleted successfully");
+  try {
+    // Use the deleteMany method to delete all documents in the collection
+    const result = await AccessCard.deleteMany({});
+
+    // Send a response indicating success
+    res.status(200).json({
+      message: "Access Card was deleted successfully",
+      deletedCount: result.deletedCount, // Number of documents deleted
+    });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      error: "There was an error",
+      message: error.message,
+    });
+  }
+});
+
 module.exports = router;
