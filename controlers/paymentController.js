@@ -6,18 +6,41 @@ const { ObjectId } = require("mongodb");
 const store_id = "black65cb4eba5f405";
 const store_passwd = "black65cb4eba5f405@ssl";
 const is_live = false; //true for live, false for sandbox
-const currentDate = new Date();
+var today = new Date();
+
+var formatter = new Intl.DateTimeFormat("en", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
+  timeZone: "Asia/Dhaka", // Bangladesh Standard Time
+});
+
+// Format the date and time using the formatter
+var dateTime = formatter.format(today);
+
+console.log("dateTime", dateTime);
 
 // Set the time zone to Bangladesh Standard Time (BST), which is UTC+6
-const options = {
-  timeZone: 'Asia/Dhaka',
-  hour12: false, // Use 24-hour format
-};
+// const options = {
+//   timeZone: 'Asia/Dhaka',
+//   hour12: false, // Use 24-hour format
+// };
+
+// Get the current time zone offset in milliseconds
+
+// Apply the offset to get Bangladesh time
+
+// Display the Bangladesh time
+// console.log(bdTime);
 
 // Format the date object to display the time in Bangladesh
-const bdTime = currentDate.toLocaleTimeString('en-US', options);
+// const bdTime = currentDate.toLocaleTimeString('en-US', options);
 
-console.log('Current time in Bangladesh:', bdTime);
+// console.log('Current time in Bangladesh:', bdTime);
 router.post("/", async (req, res) => {
   try {
     const tranId = new ObjectId().toString();
@@ -31,10 +54,11 @@ router.post("/", async (req, res) => {
       price: req.body.price,
       access_limit: req.body.access_limit,
       plan_id: req.body.productId,
-      pay_time: bdTime,
+      pay_time: dateTime,
       tran_id: tranId,
       paidStatus: false,
     };
+    console.log("memberUserInformation", memberUserInformation);
 
     // Save payment information to the database
     const PaymentUserInformation = new Payment(memberUserInformation);
@@ -49,7 +73,7 @@ router.post("/", async (req, res) => {
       cancel_url: "http://localhost:3030/cancel",
       ipn_url: "http://localhost:3030/ipn",
       shipping_method: "Courier",
-      product_id: req.body.plan_id,
+      product_id: req.body.productId,
       product_name: "Computer.",
       product_category: "Electronic",
       product_profile: "general",
@@ -116,7 +140,7 @@ router.post("/payment-success/:tranId", async (req, res) => {
 router.get("/", async (req, res, next) => {
   try {
     // Use the find method to retrieve all todos
-    const payment = await Payment.find();
+    const payment = await Payment.find({ paidStatus: true });
 
     // Send a response with the retrieved todos
     res.status(200).json({
@@ -125,6 +149,31 @@ router.get("/", async (req, res, next) => {
     });
   } catch (error) {
     // Handle errors
+    res.status(500).json({
+      error: "There was an error",
+      message: error.message,
+    });
+  }
+});
+
+router.put("/", async (req, res, next) => {
+  console.log("paidStatus: false ", req.body.id);
+  try {
+    const updatedPaidStatus = await Payment.findOneAndUpdate(
+      { _id: req.body.id }, // Query for the Payment document with the specified tran_id
+      { paidStatus: false }, // Update the paidStatus field to true
+      { new: true } // Return the modified document
+    );
+
+    if (!updatedPaidStatus) {
+      return res.status(404).json({
+        message: "Paid Status is not updated",
+      });
+    }
+
+    res.send(updatedPaidStatus);
+  } catch (error) {
+    console.error("Error updating payment:", error);
     res.status(500).json({
       error: "There was an error",
       message: error.message,
