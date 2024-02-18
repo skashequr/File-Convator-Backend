@@ -43,6 +43,7 @@ const registerController = expressAsyncHandler(async (req, res) => {
     "isAdmine =",
     isAdmin
   );
+  const ConvertLimit = 5;
   if (!name || !email || !password) {
     res.send(400);
     throw Error("All necessary input fields have not been filled");
@@ -63,7 +64,7 @@ const registerController = expressAsyncHandler(async (req, res) => {
   }
 
   // create an entry in the db
-  const user = await UserModel.create({ name, email, password, isAdmin });
+  const user = await UserModel.create({ name, email, password, isAdmin ,ConvertLimit });
   if (user) {
     res.status(201).json({
       _id: user._id,
