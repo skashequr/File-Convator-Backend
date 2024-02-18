@@ -48,14 +48,14 @@ const registerController = expressAsyncHandler(async (req, res) => {
     throw Error("All necessary input fields have not been filled");
   }
 
-  // pre-existing user
+  //--------------- pre-existing user------------------
   const userExist = await UserModel.findOne({ email });
   if (userExist) {
     // res.send(405);
     throw new Error("User already Exists");
   }
 
-  // userName already Taken
+  // -------------userName already Taken-------------------
   const userNameExist = await UserModel.findOne({ name });
   if (userNameExist) {
     // res.send(406);
