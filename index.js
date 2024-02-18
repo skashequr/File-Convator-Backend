@@ -18,9 +18,10 @@ const accessRoutes = require("./controlers/accessCardController");
 app.use(
   cors({
     origin: [
+      "https://65cf755e0ad554131014a8a0--spectacular-profiterole-6a28ae.netlify.app",
       "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
+      
+    
     ],
 
     credentials: true,

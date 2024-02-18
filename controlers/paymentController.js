@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
       total_amount: req.body.price,
       currency: "BDT",
       tran_id: tranId,
-      success_url: `http://localhost:5000/payment/payment-success/${tranId}`,
+      success_url: `https://file-convator-backend.vercel.app/payment/payment-success/${tranId}`,
       fail_url: "http://localhost:3030/fail",
       cancel_url: "http://localhost:3030/cancel",
       ipn_url: "http://localhost:3030/ipn",
@@ -103,7 +103,7 @@ router.post("/payment-success/:tranId", async (req, res) => {
       });
     }
 
-    res.redirect(`http://localhost:5173/aboutUs`);
+    res.redirect(`https://65cf755e0ad554131014a8a0--spectacular-profiterole-6a28ae.netlify.app/aboutUs`);
   } catch (error) {
     console.error("Error updating payment:", error);
     res.status(500).json({
@@ -119,10 +119,9 @@ router.get("/", async (req, res, next) => {
     const payment = await Payment.find();
 
     // Send a response with the retrieved todos
-    res.status(200).json({
-      message: "All Payment were retrieved successfully",
-      allPayment: payment,
-    });
+    res.status(200).json(
+     payment,
+    );
   } catch (error) {
     // Handle errors
     res.status(500).json({
