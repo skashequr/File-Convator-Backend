@@ -31,6 +31,10 @@ const userModel = mongoose.Schema(
       type: Number,
       requried: true,
     },
+    imageUrl: {
+      type: String,
+      requried: true,
+    }
   },
   {
     timeStamp: true,
