@@ -63,7 +63,8 @@ const registerController = expressAsyncHandler(async (req, res) => {
   }
 
   // create an entry in the db
-  const user = await UserModel.create({ name, email, password, isAdmin , imageUrl });
+  const ConvertLimit = 5;
+  const user = await UserModel.create({ name, email, password, isAdmin , imageUrl , ConvertLimit });
   if (user) {
     res.status(201).json({
       _id: user._id,
