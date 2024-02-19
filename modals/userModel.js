@@ -27,6 +27,14 @@ const userModel = mongoose.Schema(
       type: String,
       requried: true,
     },
+    ConvertLimit: {
+      type: Number,
+      requried: true,
+    },
+    imageUrl: {
+      type: String,
+      requried: true,
+    }
   },
   {
     timeStamp: true,

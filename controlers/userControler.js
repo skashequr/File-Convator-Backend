@@ -30,7 +30,7 @@ const loginController = expressAsyncHandler(async (req, res) => {
 
 // Registration
 const registerController = expressAsyncHandler(async (req, res) => {
-  const { name, email, password, isAdmin } = req.body;
+  const { name, email, password, isAdmin , imageUrl } = req.body;
 
   // check for all fields
   console.log(
@@ -63,7 +63,8 @@ const registerController = expressAsyncHandler(async (req, res) => {
   }
 
   // create an entry in the db
-  const user = await UserModel.create({ name, email, password, isAdmin });
+  const ConvertLimit = 5;
+  const user = await UserModel.create({ name, email, password, isAdmin , imageUrl , ConvertLimit });
   if (user) {
     res.status(201).json({
       _id: user._id,

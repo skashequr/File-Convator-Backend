@@ -30,6 +30,7 @@ app.use(
 );
 app.use(express.json());
 
+
 const connectDb = async () => {
   try {
     const connect = await mongoose.connect(
@@ -53,9 +54,10 @@ app.use("/search", searchRoutes);
 
 // Endpoint for PDF to Word conversion
 
-app.get("/", (req, res) => {
-  res.send("EndGame Group Project File Convarting running");
-});
+
+app.get('/', (req, res) => {
+    res.send('EndGame Group Project File Convarting running')
+})
 
 app.listen(port, () => {
   console.log(`EndGame Group Project File Convarting running in ${port}`);
