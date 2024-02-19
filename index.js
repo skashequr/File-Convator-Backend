@@ -14,6 +14,7 @@ const convertRoutes = require("./Routes/convertRoutes");
 const paymentRoutes = require("./controlers/paymentController");
 const accessRoutes = require("./controlers/accessCardController");
 const searchRoutes = require("./controlers/searchDataController");
+const usersReviewsRoutes = require("./controlers/usersReviewController");
 
 // middleware
 app.use(
@@ -29,7 +30,6 @@ app.use(
   })
 );
 app.use(express.json());
-
 
 const connectDb = async () => {
   try {
@@ -51,13 +51,13 @@ app.use("/convert", convertRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/access-card", accessRoutes);
 app.use("/search", searchRoutes);
+app.use("/users-review", usersReviewsRoutes);
 
 // Endpoint for PDF to Word conversion
 
-
-app.get('/', (req, res) => {
-    res.send('EndGame Group Project File Convarting running')
-})
+app.get("/", (req, res) => {
+  res.send("EndGame Group Project File Convarting running");
+});
 
 app.listen(port, () => {
   console.log(`EndGame Group Project File Convarting running in ${port}`);
