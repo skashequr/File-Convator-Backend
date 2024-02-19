@@ -1,5 +1,5 @@
 const express = require("express");
-const { loginController, registerController , fetchAllUsersController, singleUser, userById, pagginateUser, deleateUser, infinityScrolling, findAdmine } = require("../controlers/userControler");
+const { loginController, registerController , fetchAllUsersController, singleUser, userById, pagginateUser, deleateUser, infinityScrolling, findAdmine, UpdateUser } = require("../controlers/userControler");
 const { protect } = require("../middleware/authMiddleware");
 
 
@@ -14,5 +14,6 @@ Router.get("/pagginate" , pagginateUser);
 Router.get("/infinityScrolling" , infinityScrolling);
 Router.delete("/delateUser/:id" , deleateUser);
 Router.get("/findAdmine" , findAdmine);
+Router.patch("/update" , UpdateUser);
 
 module.exports = Router;

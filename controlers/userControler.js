@@ -218,6 +218,32 @@ const findAdmine = expressAsyncHandler(async (req, res) => {
 const paidUsers = expressAsyncHandler(async (req, res) => {
 
 });
+const UpdateUser = expressAsyncHandler(async (req, res) => {
+  const email = req.query.email;
+
+  try {
+      // Find the user by email
+      const user = await User.findOne({ email });
+
+      // If user not found, return 404
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const limite = req.body.ConvertLimit;
+
+      user.ConvertLimit = limite;
+
+      await user.save();
+
+      res.status(200).json({ message: "User limit updated successfully" });
+  } catch (error) {
+      // Handle any errors
+      console.error("Error updating user limit:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = {
   loginController,
   registerController,
@@ -229,5 +255,6 @@ module.exports = {
   deleateUser,
   infinityScrolling,
   findAdmine,
-  paidUsers
+  paidUsers,
+  UpdateUser
 };
