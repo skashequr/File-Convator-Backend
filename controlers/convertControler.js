@@ -9,8 +9,8 @@ const mammoth = require("mammoth");
 
 const PptxGenJS = require("pptxgenjs");
 const pptxgen = require('pptxgenjs');
-
-
+const officegen = require('officegen')
+const PDFParser = require("pdf-parse");
 const { PDFDocument } = require('pdf-lib');
 const PdfToPpt = asyncHandler(async (req, res) => {
   try {
@@ -70,38 +70,77 @@ const pdfToPPtGet = asyncHandler(async (req, res) => {
   });
 });
 
+
 const pdftoppt = asyncHandler(async (req, res) => {
   const filePath = req.file.path;
-  console.log(filePath);
+  const ext = ".pptx"; // Change to .pptx for PowerPoint format
+  const outputFileName = `convertto${ext}`;
+  const outputPath = path.join(path.dirname(filePath), outputFileName); // Use the same directory as the uploaded PDF file
 
-  const outputPath = path.join(__dirname, '..', 'uploads', 'output.pptx');
+  try {
+    // Read PDF file
+    const pdfBuffer = fs2.readFileSync(filePath);
+    let pres = new PptxGenJS();
+    // Parse the PDF
+    const data = await PDFParser(pdfBuffer);
+    
+    // Extract text content
+    const text = data.text;
 
-  const fileStream = fs2.createReadStream(filePath);
-  // const writeStream = fs2.createWriteStream(outputPath);
+    // Split text into chunks (assuming each chunk represents a separate slide)
+    const textChunks = text.split('\n\n'); // Change the delimiter as needed
+    
+    // Add each chunk of text to a new slide
+    textChunks.forEach(chunk => {
+      const slide = pres.addSlide();
+      slide.addText(chunk);
+    });
 
-      // Load PDF file
-      const pdfBuffer = fs2.readFileSync(req.file.path);
-      const pdfDoc = await PDFDocument.load(pdfBuffer);
-      const pptx = new pptxgen();
-      const slide = pptx.addSlide();
-
-      const pages = pdfDoc.getPages();
-      // console.log(...pages.getTextContent);
-      for (const page of pages) {
-      //   const text = await page.getTextContent();
-      //   slide.addText(text.items.map(item => item.str).join('\n'));
-      
-      }
-       // Generate PPT
-    // const pptxBuffer = await pptx.output();
-    // console.log(pptxBuffer);
-  
+    // Generate the PPT file
+    pres.writeFile(outputPath)
+      .then(() => {
+        console.log('PPT file created:', outputPath);
+        fs.unlink(filePath);
+        console.log('PDF file deleted:', filePath);
+        res.download(outputPath);
+      })
+      .catch(err => {
+        console.error('Error creating PPT:', err);
+        res.status(500).send('Error creating PPT');
+      });
+  } catch (error) {
+    // Handle errors
+  }
 });
+
+const getpdftoppt = asyncHandler(async (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', 'convertto.pptx');
+  if (!filePath) {
+    return
+  }
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // Delete the file after sending it
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
+    }
+  });
+});
+
 
 
 
 module.exports = {
   PdfToPpt,
   pdfToPPtGet,
-  pdftoppt
+  pdftoppt,
+  getpdftoppt
 };
