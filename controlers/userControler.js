@@ -213,6 +213,10 @@ const findAdmine = expressAsyncHandler(async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+const paidUsers = expressAsyncHandler(async (req, res) => {
+
+});
 module.exports = {
   loginController,
   registerController,
@@ -224,4 +228,5 @@ module.exports = {
   deleateUser,
   infinityScrolling,
   findAdmine,
+  paidUsers
 };
