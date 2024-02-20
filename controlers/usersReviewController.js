@@ -54,7 +54,27 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/user", async (req, res, next) => {
+  try {
+    // Use the find method to retrieve all todos
+    const usersReviews = await UsersReviews.find({ email: req.query.email });
+
+    // Send a response with the retrieved todos
+    res.status(200).json({
+      message: "Users reviews were retrieved successfully",
+      userReviews: usersReviews,
+    });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      error: "There was an error",
+      message: error.message,
+    });
+  }
+});
+
 router.delete("/:id", async (req, res, next) => {
+  console.log("req.query.id", req.params.id);
   try {
     // Use the find method to retrieve all todos
     const result = await UsersReviews.deleteOne({ _id: req.params.id });
