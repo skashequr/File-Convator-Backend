@@ -1,10 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const fs = require("fs").promises;
+const fs2 = require("fs")
 const path = require("path");
 const libre = require("libreoffice-convert");
 libre.convertAsync = require("util").promisify(libre.convert);
+const { exec } = require('child_process');
 const mammoth = require("mammoth");
+
 const PptxGenJS = require("pptxgenjs");
+const pptxgen = require('pptxgenjs');
+
+
+const { PDFDocument } = require('pdf-lib');
 const PdfToPpt = asyncHandler(async (req, res) => {
   try {
     console.log("xxyyzz");
@@ -63,8 +70,38 @@ const pdfToPPtGet = asyncHandler(async (req, res) => {
   });
 });
 
+const pdftoppt = asyncHandler(async (req, res) => {
+  const filePath = req.file.path;
+  console.log(filePath);
+
+  const outputPath = path.join(__dirname, '..', 'uploads', 'output.pptx');
+
+  const fileStream = fs2.createReadStream(filePath);
+  // const writeStream = fs2.createWriteStream(outputPath);
+
+      // Load PDF file
+      const pdfBuffer = fs2.readFileSync(req.file.path);
+      const pdfDoc = await PDFDocument.load(pdfBuffer);
+      const pptx = new pptxgen();
+      const slide = pptx.addSlide();
+
+      const pages = pdfDoc.getPages();
+      // console.log(...pages.getTextContent);
+      for (const page of pages) {
+      //   const text = await page.getTextContent();
+      //   slide.addText(text.items.map(item => item.str).join('\n'));
+      
+      }
+       // Generate PPT
+    // const pptxBuffer = await pptx.output();
+    // console.log(pptxBuffer);
+  
+});
+
+
 
 module.exports = {
   PdfToPpt,
-  pdfToPPtGet
+  pdfToPPtGet,
+  pdftoppt
 };

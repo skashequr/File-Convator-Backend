@@ -14,6 +14,7 @@ const convertRoutes = require("./Routes/convertRoutes");
 const paymentRoutes = require("./controlers/paymentController");
 const accessRoutes = require("./controlers/accessCardController");
 const searchRoutes = require("./controlers/searchDataController");
+const usersReviewsRoutes = require("./controlers/usersReviewController");
 
 // middleware
 app.use(
@@ -50,6 +51,7 @@ app.use("/convert", convertRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/access-card", accessRoutes);
 app.use("/search", searchRoutes);
+app.use("/users-review", usersReviewsRoutes);
 
 
 

@@ -154,6 +154,39 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/all-count", async (req, res, next) => {
+  try {
+    // Use the find method to retrieve all payments
+    const allPayments = await Payment.find();
+    const count = allPayments.length; // Count the number of payments
+
+    // Send a response with the count of payments
+    res.status(200).json({ count });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      error: "There was an error",
+      message: error.message,
+    });
+  }
+});
+
+router.get("/all-pay-list", async (req, res, next) => {
+  try {
+    // Use the find method to retrieve all payments
+    const allPayments = await Payment.find();
+
+    // Send a response with the count of payments
+    res.status(200).json(allPayments);
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      error: "There was an error",
+      message: error.message,
+    });
+  }
+});
+
 router.put("/", async (req, res, next) => {
   console.log("paidStatus: false ", req.body.id);
   try {
