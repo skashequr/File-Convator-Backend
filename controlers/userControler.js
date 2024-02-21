@@ -30,19 +30,19 @@ const loginController = expressAsyncHandler(async (req, res) => {
 
 // Registration
 const registerController = expressAsyncHandler(async (req, res) => {
-  const { name, email, password, isAdmin , imageUrl } = req.body;
+  const { name, email, password, isAdmin, imageUrl, month } = req.body;
 
   // check for all fields
-  console.log(
-    "password = ",
-    password,
-    " email = ",
-    email,
-    "name = ",
-    name,
-    "isAdmine =",
-    isAdmin
-  );
+  // console.log(
+  //   "password = ",
+  //   password,
+  //   " email = ",
+  //   email,
+  //   "name = ",
+  //   name,
+  //   "isAdmine =",
+  //   isAdmin
+  // );
   if (!name || !email || !password) {
     res.send(400);
     throw Error("All necessary input fields have not been filled");
@@ -64,7 +64,15 @@ const registerController = expressAsyncHandler(async (req, res) => {
 
   // create an entry in the db
   const ConvertLimit = 5;
-  const user = await UserModel.create({ name, email, password, isAdmin , imageUrl , ConvertLimit });
+  const user = await UserModel.create({
+    name,
+    email,
+    password,
+    isAdmin,
+    imageUrl,
+    ConvertLimit,
+    month,
+  });
   if (user) {
     res.status(201).json({
       _id: user._id,
@@ -215,32 +223,30 @@ const findAdmine = expressAsyncHandler(async (req, res) => {
   }
 });
 
-const paidUsers = expressAsyncHandler(async (req, res) => {
-
-});
+const paidUsers = expressAsyncHandler(async (req, res) => {});
 const UpdateUser = expressAsyncHandler(async (req, res) => {
   const email = req.query.email;
 
   try {
-      // Find the user by email
-      const user = await User.findOne({ email });
+    // Find the user by email
+    const user = await User.findOne({ email });
 
-      // If user not found, return 404
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
-      }
+    // If user not found, return 404
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      const limite = req.body.ConvertLimit;
+    const limite = req.body.ConvertLimit;
 
-      user.ConvertLimit = limite;
+    user.ConvertLimit = limite;
 
-      await user.save();
+    await user.save();
 
-      res.status(200).json({ message: "User limit updated successfully" });
+    res.status(200).json({ message: "User limit updated successfully" });
   } catch (error) {
-      // Handle any errors
-      console.error("Error updating user limit:", error);
-      res.status(500).json({ message: "Internal server error" });
+    // Handle any errors
+    console.error("Error updating user limit:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -256,5 +262,5 @@ module.exports = {
   infinityScrolling,
   findAdmine,
   paidUsers,
-  UpdateUser
+  UpdateUser,
 };
