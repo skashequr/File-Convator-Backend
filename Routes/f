@@ -1,0 +1,39 @@
+const asyncHandler = require('express-async-handler');
+const fs = require('fs');
+const path = require('path');
+const officeConverter = require('office-converter')();
+
+const pptToPdf = asyncHandler(async (req, res) => {
+  const filePath = req.file.path;
+  const ext = ".pdf"; // PDF format
+  const outputFileName = `converted${ext}`;
+  const outputPath = path.join(path.dirname(filePath), outputFileName); // Use the same directory as the uploaded PowerPoint file
+
+  try {
+    // Convert PowerPoint to PDF
+    await officeConverter.convert(filePath, outputPath);
+
+    // Send the PDF file as a response
+    res.download(outputPath, outputFileName, async (err) => {
+      if (err) {
+        console.error('Error sending PDF file:', err);
+        return res.status(500).send('Error sending PDF file');
+      }
+
+      // Delete the PowerPoint and PDF files after the download is complete
+      fs.unlinkSync(filePath);
+      console.log('PowerPoint file deleted:', filePath);
+
+      // Wait for a short delay before attempting to delete the PDF file
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      fs.unlinkSync(outputPath);
+      console.log('PDF file deleted:', outputPath);
+    });
+  } catch (error) {
+    console.error('Error converting PowerPoint to PDF:', error);
+    res.status(500).send('Error converting PowerPoint to PDF');
+  }
+});
+
+module.exports = pptToPdf;

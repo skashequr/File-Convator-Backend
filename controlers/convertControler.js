@@ -7,12 +7,11 @@ libre.convertAsync = require("util").promisify(libre.convert);
 const { exec } = require('child_process');
 const mammoth = require("mammoth");
 
+const officegen = require('officegen');
 const PptxGenJS = require("pptxgenjs");
 const pptxgen = require('pptxgenjs');
-const officegen = require('officegen')
 const PDFParser = require("pdf-parse");
 const { PDFDocument } = require('pdf-lib');
-
 const ExcelJS = require('exceljs');
 const PdfToPpt = asyncHandler(async (req, res) => {
   try {
@@ -208,6 +207,36 @@ const getpdftoexcle = asyncHandler(async (req, res) => {
   });
 });
 
+//ppt to pdf convert 
+const pptToPdfConvert = asyncHandler(async (req, res) => {
+  console.log("Converting PowerPoint to PDF...");
+  const filePath = req.file.path;
+  const ext = ".pdf";
+  const outputFileName = `converted${ext}`;
+  const outputPath = path.join(path.dirname(filePath), outputFileName);
+  const file = fs2.readFileSync(filePath);
+
+  const fileBuffer = fs2.readFileSync(filePath);
+  libre.convert(fileBuffer, ext, undefined, (err, result) => {
+    if (err) {
+      console.error('Error converting file:', err);
+      return res.status(500).json({ error: 'Error converting file' });
+    }
+
+    // Write the converted PDF buffer to a file
+    fs.writeFile(outputPath, result, (err) => {
+      if (err) {
+        console.error('Error writing PDF file:', err);
+        return res.status(500).json({ error: 'Error writing PDF file' });
+      }
+
+      console.log('PDF file saved successfully:', outputPath);
+      // Optionally, you can send the path to the saved PDF file in the response
+      return res.status(200).json({ message: 'PDF conversion successful', pdfPath: outputPath });
+    });
+  });
+});
+
 
 module.exports = {
   PdfToPpt,
@@ -215,5 +244,6 @@ module.exports = {
   pdftoppt,
   getpdftoppt,
   pdftoexcel,
-  getpdftoexcle
+  getpdftoexcle,
+  pptToPdfConvert,
 };
