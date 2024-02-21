@@ -185,8 +185,28 @@ const pdftoexcel = asyncHandler(async (req, res) => {
     res.status(500).send('Error converting PDF to Excel');
   }
 });
-
-
+//get excle
+const getpdftoexcle = asyncHandler(async (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', 'converted.xlsx');
+  if (!filePath) {
+    return
+  }
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // Delete the file after sending it
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
+    }
+  });
+});
 
 
 module.exports = {
@@ -194,5 +214,6 @@ module.exports = {
   pdfToPPtGet,
   pdftoppt,
   getpdftoppt,
-  pdftoexcel
+  pdftoexcel,
+  getpdftoexcle
 };
