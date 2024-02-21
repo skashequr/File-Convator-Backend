@@ -14,8 +14,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const { PdfToPpt, pdfToPPtGet, pdftoppt } = require('../controlers/convertControler');
+const { PdfToPpt, pdfToPPtGet, pdftoppt, getpdftoppt, pdftoexcel, getpdftoexcle, pptToPdfConvert, getppttopdf } = require('../controlers/convertControler');
 router.get("/" , pdfToPPtGet)
 router.post('/',upload.single('file'), PdfToPpt);
 router.post('/pdftoppt',upload.single('file') ,pdftoppt);
+router.get('/getppt',getpdftoppt);
+
+router.post('/pdftoexcel',upload.single('file'),pdftoexcel);
+router.get('/getpdftoexcle', getpdftoexcle);
+
+router.post('/ppttopdfconvert',upload.single('file'),pptToPdfConvert);
+router.get('/getppttopf', getppttopdf);
 module.exports = router;
