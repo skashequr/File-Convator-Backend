@@ -14,6 +14,7 @@ const convertRoutes = require("./Routes/convertRoutes");
 const paymentRoutes = require("./controlers/paymentController");
 const accessRoutes = require("./controlers/accessCardController");
 const searchRoutes = require("./controlers/searchDataController");
+const usersReviewsRoutes = require("./controlers/usersReviewController");
 
 // middleware
 app.use(
@@ -21,8 +22,8 @@ app.use(
     origin: [
       "https://65cf7c887739e70095b163ee--spectacular-profiterole-6a28ae.netlify.app",
       "http://localhost:5173",
-      
-    
+      "http://localhost:5174",
+      "http://localhost:5175",
     ],
 
     credentials: true,
@@ -50,12 +51,7 @@ app.use("/convert", convertRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/access-card", accessRoutes);
 app.use("/search", searchRoutes);
-
-
-
-
-
-
+app.use("/users-review", usersReviewsRoutes);
 
 // Endpoint for PDF to Word conversion
 
