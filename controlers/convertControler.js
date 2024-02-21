@@ -214,9 +214,8 @@ const pptToPdfConvert = asyncHandler(async (req, res) => {
   const ext = ".pdf";
   const outputFileName = `converted${ext}`;
   const outputPath = path.join(path.dirname(filePath), outputFileName);
-  const file = fs2.readFileSync(filePath);
-
   const fileBuffer = fs2.readFileSync(filePath);
+
   libre.convert(fileBuffer, ext, undefined, (err, result) => {
     if (err) {
       console.error('Error converting file:', err);
@@ -224,19 +223,51 @@ const pptToPdfConvert = asyncHandler(async (req, res) => {
     }
 
     // Write the converted PDF buffer to a file
-    fs.writeFile(outputPath, result, (err) => {
+    fs2.writeFile(outputPath, result, (err) => {
       if (err) {
         console.error('Error writing PDF file:', err);
         return res.status(500).json({ error: 'Error writing PDF file' });
       }
 
       console.log('PDF file saved successfully:', outputPath);
-      // Optionally, you can send the path to the saved PDF file in the response
+
+      // Unlink (delete) the original PPT file
+      fs2.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting original PPT file:', err);
+          // This is not critical, so we don't return an error response here
+        } else {
+          console.log('Original PPT file deleted successfully:', filePath);
+        }
+      });
+      
+      // Send the path to the saved PDF file in the response
       return res.status(200).json({ message: 'PDF conversion successful', pdfPath: outputPath });
     });
   });
 });
 
+const getppttopdf = asyncHandler(async (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', 'converted.pdf');
+  if (!filePath) {
+    return
+  }
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // Delete the file after sending it
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log('File deleted successfully');
+        }
+      });
+    }
+  });
+});
 
 module.exports = {
   PdfToPpt,
@@ -246,4 +277,5 @@ module.exports = {
   pdftoexcel,
   getpdftoexcle,
   pptToPdfConvert,
+  getppttopdf
 };
