@@ -12,6 +12,8 @@ const pptxgen = require('pptxgenjs');
 const officegen = require('officegen')
 const PDFParser = require("pdf-parse");
 const { PDFDocument } = require('pdf-lib');
+
+const ExcelJS = require('exceljs');
 const PdfToPpt = asyncHandler(async (req, res) => {
   try {
     console.log("xxyyzz");
@@ -138,9 +140,59 @@ const getpdftoppt = asyncHandler(async (req, res) => {
 
 
 
+//Pdf to excle convert
+
+const pdftoexcel = asyncHandler(async (req, res) => {
+  const filePath = req.file.path;
+  const ext = ".xlsx"; // Excel format
+  const outputFileName = `converted${ext}`;
+  const outputPath = path.join(path.dirname(filePath), outputFileName); // Use the same directory as the uploaded PDF file
+
+  try {
+    // Read PDF file
+    const pdfBuffer = fs2.readFileSync(filePath);
+    // Parse the PDF
+    const data = await PDFParser(pdfBuffer);
+    
+    // Extract text content
+    const text = data.text;
+
+    // Create Excel workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet 1');
+    worksheet.addRow([text]); // Add text content as a row
+
+    // Write Excel file
+    await workbook.xlsx.writeFile(outputPath);
+
+    // Close the workbook to ensure the file is properly written and closed
+    await workbook.xlsx.writeFile(outputPath);
+
+    // Send the Excel file as a response
+    res.download(outputPath, outputFileName, async () => {
+      // Delete the PDF and Excel files after the download is complete
+       fs.unlink(filePath); // Delete the PDF file
+      console.log('PDF file deleted:', filePath);
+
+      // Wait for a short delay before attempting to delete the Excel file
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // fs.unlink(outputPath); // Delete the Excel file
+      console.log('Excel file deleted:', outputPath);
+    });
+  } catch (error) {
+    console.error('Error converting PDF to Excel:', error);
+    res.status(500).send('Error converting PDF to Excel');
+  }
+});
+
+
+
+
 module.exports = {
   PdfToPpt,
   pdfToPPtGet,
   pdftoppt,
-  getpdftoppt
+  getpdftoppt,
+  pdftoexcel
 };
