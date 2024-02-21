@@ -15,9 +15,9 @@ const userModel = mongoose.Schema(
       type: String,
       requried: true,
     },
-    isAdmin:{
+    isAdmin: {
       type: Boolean,
-      requried: true
+      requried: true,
     },
     imgUrl: {
       type: String,
@@ -34,7 +34,11 @@ const userModel = mongoose.Schema(
     imageUrl: {
       type: String,
       requried: true,
-    }
+    },
+    month: {
+      type: String,
+      requried: true,
+    },
   },
   {
     timeStamp: true,
