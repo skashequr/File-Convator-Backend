@@ -128,7 +128,7 @@ router.post("/payment-success/:tranId", async (req, res) => {
       });
     }
 
-    res.redirect(`https://65cf755e0ad554131014a8a0--spectacular-profiterole-6a28ae.netlify.app/aboutUs`);
+    res.redirect(`http://localhost:5173/dashboad/userProfile`);
   } catch (error) {
     console.error("Error updating payment:", error);
     res.status(500).json({
